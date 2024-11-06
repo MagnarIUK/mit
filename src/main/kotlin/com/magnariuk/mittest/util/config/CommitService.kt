@@ -6,9 +6,12 @@ import com.magnariuk.mittest.data_api.User
 import com.magnariuk.mittest.util.enums.ActivityTypes
 import com.magnariuk.mittest.util.controllers.DbController
 import com.magnariuk.mittest.util.enums.CommitStatuses
+import com.magnariuk.mittest.util.util.importFile
 import com.vaadin.copilot.userinfo.UserInfoRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.io.InputStream
+import java.nio.file.Path
 
 @Service
 class CommitService(
@@ -18,7 +21,7 @@ class CommitService(
 ) {
     val db = dbc.getDB()
 
-    fun createCommit(projectId: Int, user: User, hash: String, message: String) {
+    fun createCommit(projectId: Int, user: User, hash: String, message: String, files: MutableMap<String, InputStream>) {
         val owner = userService.getUserById(projectService.getProjectOwner(projectId)!!.user_id)!!
         if(user.id == owner.id){
             db.InsertCommit(projectId, hash, message, user.id, CommitStatuses.AUTO_ACCEPTED.id)
@@ -28,6 +31,21 @@ class CommitService(
                 ActivityTypes.COMMIT_CREATED.type,
                 "Ви додали внесок на проєкті '/project/$projectId' з описом:\n '$message'"
             )
+            files.forEach { (fileName, inputStream) ->
+                val fileToCreate = importFile(fileName, inputStream, commit!!)
+                AddFileToCommit(
+                    commit,
+                    File(
+                        1,
+                        commit.commit_id,
+                        fileToCreate.absolutePath,
+                        fileName,
+                        fileToCreate.length(),
+                        2
+                    ))
+            }
+
+
         } else {
             db.InsertCommit(projectId, hash, message, user.id, CommitStatuses.PENDING.id)
             val commit = db.getCommitByHash(hash)
@@ -41,6 +59,21 @@ class CommitService(
                 ActivityTypes.COMMIT_MEMBER_CREATED.type,
                 "Ви створили внесок '/commit?c=${commit?.commit_id}' на проєкті '/project?p=$projectId'"
             )
+
+            files.forEach { (fileName, inputStream) ->
+                val fileToCreate = importFile(fileName, inputStream, commit!!)
+                AddFileToCommit(
+                    commit,
+                    File(
+                        1,
+                        commit.commit_id,
+                        fileToCreate.absolutePath,
+                        fileName,
+                        fileToCreate.length(),
+                        2
+                    ))
+            }
+
         }
     }
 

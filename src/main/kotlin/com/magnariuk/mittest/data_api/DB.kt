@@ -214,7 +214,7 @@ open class DB(private val dbController: DatabaseController) {
 
 
 
-    fun InsertFiles(_commit_id: Int, _file_path: String, _file_name: String, _file_size: Int){
+    fun InsertFiles(_commit_id: Int, _file_path: String, _file_name: String, _file_size: Long){
         dbController.dbQuery {
 
             Files.insert {

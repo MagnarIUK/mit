@@ -40,7 +40,7 @@ data class File(
     val commit_id: Int,
     val file_path: String,
     val file_name: String,
-    val file_size: Int,
+    val file_size: Long,
     val added_at: Long
 )
 

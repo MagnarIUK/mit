@@ -39,7 +39,7 @@ object Files: Table(){
     val commit_id: Column<Int> = integer("commit_id").references(Commits.commit_id)
     val file_path: Column<String> = varchar("file_path", 1000)
     val file_name: Column<String> = varchar("file_name", 50)
-    val file_size: Column<Int> = integer("file_size")
+    val file_size: Column<Long> = long("file_size")
     val added_at: Column<Long> = long("added_at")
     override val primaryKey = PrimaryKey(file_id, name = "files_pk")
 }

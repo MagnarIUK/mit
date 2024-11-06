@@ -525,14 +525,16 @@ class ProjectView(
                                     placeholder = "Введіть повідомлення внеску"
                                     maxLength = 500
                                 }
-                                var files: MutableMap<String, InputStream> = mutableMapOf()
 
+                                var files: MutableMap<String, InputStream> = mutableMapOf()
                                 val buffer = MultiFileMemoryBuffer()
 
                                 val uploader = Upload(buffer).apply {
                                     addSucceededListener { event ->
+
                                         val fileName = event.fileName
                                         val inputStream = buffer.getInputStream(fileName)
+                                        println(fileName)
                                         files[fileName] = inputStream
                                     }
                                 }
@@ -556,10 +558,11 @@ class ProjectView(
                                                         currentProject!!.project_id,
                                                         user!!,
                                                         message.value.hashCode().toString(),
-                                                        message.value
+                                                        message.value,
+                                                        files
                                                     )
 
-                                                    showSuccess("Створено у внесок")
+                                                    showSuccess("Створено внесок")
                                                     dialog.close()
                                                     updateUI()
                                                 }
