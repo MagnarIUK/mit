@@ -17,7 +17,7 @@ import com.magnariuk.mittest.util.util.px
 import com.magnariuk.mittest.util.util.showSuccess
 
 
-@PageTitle("Registration")
+@PageTitle("Регістрація")
 @Menu(icon = "line-awesome/svg/pencil-ruler-solid.svg", order = 2.0)
 @Route(value = "registration")
 @AnonymousAllowed

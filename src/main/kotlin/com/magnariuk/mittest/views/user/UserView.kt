@@ -16,10 +16,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.router.BeforeEnterEvent
-import com.vaadin.flow.router.BeforeEnterObserver
-import com.vaadin.flow.router.QueryParameters
-import com.vaadin.flow.router.Route
 import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.enums.ActivityTypes
 import com.magnariuk.mittest.util.util.*
@@ -31,7 +27,9 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.renderer.ComponentRenderer
+import com.vaadin.flow.router.*
 
+@PageTitle("Користувач")
 @Route("/user", layout = MainLayout::class)
 class UserView(
     @Autowired private val authService: AuthService,
@@ -213,11 +211,11 @@ class UserView(
 
                         alignItems = Alignment.CENTER
                         justifyContentMode = JustifyContentMode.CENTER
-                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                         style.set(CSS.BORDER_RADIUS, 15.px)
                         style.set(CSS.PADDING, 10.px)
                         style.set(CSS.MARGIN, 5.px)
-                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                     },
                     HorizontalLayout(NativeLabel("Видиме ім'я: ${user?.display_name}"),Button("Змінити").apply {
                         onLeftClick {
@@ -262,11 +260,11 @@ class UserView(
                         justifyContentMode = JustifyContentMode.CENTER
                         style.set(CSS.BORDER_RADIUS, 15.px)
 
-                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                         style.set(CSS.BORDER_COLOR, 10.px)
                         style.set(CSS.PADDING, 10.px)
                         style.set(CSS.MARGIN, 5.px)
-                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                     },
                     HorizontalLayout(NativeLabel("Електронна пошта: ${user!!.email}"),Button("Змінити").apply {
 
@@ -310,22 +308,22 @@ class UserView(
                             style.set(CSS.BORDER_RADIUS, 15.px)
                         alignItems = Alignment.CENTER
                         justifyContentMode = JustifyContentMode.CENTER
-                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                         style.set(CSS.BORDER_COLOR  , 10.px)
                         style.set(CSS.PADDING, 10.px)
                         style.set(CSS.MARGIN, 5.px)
-                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                     },
                     HorizontalLayout(NativeLabel("Аккаунт створено: ${unixToDate(user!!.created_at)}")).apply {
                         width = 600.px
                         alignItems = Alignment.CENTER
                         justifyContentMode = JustifyContentMode.CENTER
                         style.set(CSS.BORDER_RADIUS, 15.px)
-                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                        style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                         style.set(CSS.BORDER_COLOR  , 10.px)
                         style.set(CSS.PADDING, 10.px)
                         style.set(CSS.MARGIN, 5.px)
-                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                        style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                     })
 
                 val dataProvider = ListDataProvider(userService.getActivities(user!!.id))
@@ -427,11 +425,11 @@ class UserView(
                     alignItems = Alignment.CENTER
                     justifyContentMode = JustifyContentMode.CENTER
                     style.set(CSS.BORDER_RADIUS, 15.px)
-                    style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                    style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                     style.set(CSS.BORDER_COLOR  , 10.px)
                     style.set(CSS.PADDING, 10.px)
                     style.set(CSS.MARGIN, 5.px)
-                    style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                    style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                 }
 
 
@@ -531,11 +529,11 @@ class UserView(
                 alignItems = Alignment.CENTER
                 justifyContentMode = JustifyContentMode.CENTER
                 style.set(CSS.BORDER_RADIUS, 15.px)
-                style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                 style.set(CSS.BORDER_COLOR  , 10.px)
                 style.set(CSS.PADDING, 10.px)
                 style.set(CSS.MARGIN, 5.px)
-                style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
             }
 
 

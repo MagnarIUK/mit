@@ -25,13 +25,14 @@ open class DatabaseController{
             Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
             transaction {
                 addLogger(StdOutSqlLogger)
+                SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, UserActivities)
             }
             println("База даних існує і підключена")
         } else {
             Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
             transaction {
                 addLogger(StdOutSqlLogger)
-                SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, Tags, UserActivities)
+                SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, UserActivities)
                 println("Таблиці створені")
             }
             println("База даних створена і таблиці ініціалізовані")
@@ -314,31 +315,6 @@ open class DB(private val dbController: DatabaseController) {
     }
 
 
-    fun InsertTag(_project_id: Int, _tag_name: String, _commit_id: Int) {
-        dbController.dbQuery {
-
-            Tags.insert {
-                it[project_id] = _project_id
-                it[tag_name] = _tag_name
-                it[commit_id] = _commit_id
-                it[tagged_at] = getUNIXtime()
-
-            }
-        }
-    }
-    fun getAllTags(): List<Tag>{
-        return dbController.dbQuery {
-            Tags.selectAll().map { Converter().toTag(it) }
-        }
-    }
-    fun getTagsByCommitId(_commit_id: Int): List<Tag>{
-        return dbController.dbQuery {
-            Tags.selectAll().where{ Tags.commit_id eq _commit_id }.map { Converter().toTag(it) }
-        }
-    }
-
-
-
 
     fun InsertUserActivity(_user_id: Int, _activity_type: String, _description: String){
         dbController.dbQuery {
@@ -429,13 +405,5 @@ open class Converter() {
         )
     }
 
-    fun toTag(row: ResultRow): Tag{
-        return Tag(
-            tag_id = row[Tags.tag_id],
-            project_id = row[Tags.project_id],
-            tag_name = row[Tags.tag_name],
-            commit_id = row[Tags.commit_id],
-            tagged_at = row[Tags.tagged_at],
-        )
-    }
+
 }

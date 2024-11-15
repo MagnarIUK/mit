@@ -7,12 +7,11 @@ import com.magnariuk.mittest.util.enums.ActivityTypes
 import com.magnariuk.mittest.util.controllers.DbController
 import com.magnariuk.mittest.util.enums.CommitStatuses
 import com.magnariuk.mittest.util.util.importFile
-import com.vaadin.copilot.userinfo.UserInfoRequest
+import com.magnariuk.mittest.util.util.unzipArchive
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.InputStream
-import java.nio.file.Path
-
+import com.magnariuk.mittest.util.util.getFileExtensionM
 @Service
 class CommitService(
     @Autowired private val dbc: DbController,
@@ -31,19 +30,7 @@ class CommitService(
                 ActivityTypes.COMMIT_CREATED.type,
                 "Ви додали внесок на проєкті '/project/$projectId' з описом:\n '$message'"
             )
-            files.forEach { (fileName, inputStream) ->
-                val fileToCreate = importFile(fileName, inputStream, commit!!)
-                AddFileToCommit(
-                    commit,
-                    File(
-                        1,
-                        commit.commit_id,
-                        fileToCreate.absolutePath,
-                        fileName,
-                        fileToCreate.length(),
-                        2
-                    ))
-            }
+            importFiles(files, commit!!)
 
 
         } else {
@@ -59,9 +46,32 @@ class CommitService(
                 ActivityTypes.COMMIT_MEMBER_CREATED.type,
                 "Ви створили внесок '/commit?c=${commit?.commit_id}' на проєкті '/project?p=$projectId'"
             )
+            importFiles(files, commit!!)
 
-            files.forEach { (fileName, inputStream) ->
-                val fileToCreate = importFile(fileName, inputStream, commit!!)
+        }
+    }
+
+    fun getFilesByCommit(commitId: Int): List<File> = db.getFilesByCommitId(commitId)
+
+    fun importFiles(files: MutableMap<String, InputStream>, commit: Commit){
+        files.forEach { (fileName, inputStream) ->
+            val ex = getFileExtensionM(fileName)
+            if (ex == "zip"){
+                val unpackedFiles = unzipArchive(inputStream, commit)
+                unpackedFiles.forEach { (fileName1, fileUn ) ->
+                    AddFileToCommit(
+                        commit,
+                        File(
+                            1,
+                            commit.commit_id,
+                            fileUn.absolutePath,
+                            fileName1,
+                            fileUn.length(),
+                            2
+                        ))
+                }
+            } else{
+                val fileToCreate = importFile(fileName, inputStream, commit)
                 AddFileToCommit(
                     commit,
                     File(

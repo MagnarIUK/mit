@@ -36,14 +36,11 @@ import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.renderer.ComponentRenderer
-import com.vaadin.flow.router.BeforeEnterEvent
-import com.vaadin.flow.router.BeforeEnterObserver
-import com.vaadin.flow.router.QueryParameters
-import com.vaadin.flow.router.Route
+import com.vaadin.flow.router.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.InputStream
 
-
+@PageTitle("Проєкт")
 @Route("/project", layout = MainLayout::class)
 class ProjectView(
     @Autowired private val authService: AuthService,
@@ -554,17 +551,25 @@ class ProjectView(
                                             Button("Створити").apply {
                                                 addThemeVariants(ButtonVariant.LUMO_PRIMARY)
                                                 onLeftClick {
-                                                    commitService.createCommit(
-                                                        currentProject!!.project_id,
-                                                        user!!,
-                                                        message.value.hashCode().toString(),
-                                                        message.value,
-                                                        files
-                                                    )
+                                                    var hashCode = generateRandomHex(33)
 
-                                                    showSuccess("Створено внесок")
-                                                    dialog.close()
-                                                    updateUI()
+                                                    while (commitService.getCommitsByCommitHash(hashCode)!= null){
+                                                        hashCode = generateRandomHex(33)
+                                                    }
+
+                                                        commitService.createCommit(
+                                                            currentProject!!.project_id,
+                                                            user!!,
+                                                            hashCode,
+                                                            message.value,
+                                                            files
+                                                        )
+
+                                                        showSuccess("Створено внесок")
+                                                        dialog.close()
+                                                        updateUI()
+
+
                                                 }
                                             })
                                     )
@@ -579,11 +584,11 @@ class ProjectView(
                     alignItems = Alignment.CENTER
                     justifyContentMode = JustifyContentMode.CENTER
                     width = 800.px
-                    style.set("background-color", "#f0f0f0")
-                    style.set("border-radius", "10px")
-                    style.set("padding", "10px")
-                    style.set("margin", "5px")
-                    style.set("border", "1px solid #d3d3d3")
+                    style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
+                    style.set(CSS.BORDER_RADIUS, 10.px)
+                    style.set(CSS.PADDING, 10.px)
+                    style.set(CSS.MARGIN, 5.px)
+                    style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                 }
 
 

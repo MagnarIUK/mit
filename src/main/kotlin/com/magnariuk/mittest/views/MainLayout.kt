@@ -1,6 +1,7 @@
 package com.magnariuk.mittest.views
 
 import com.magnariuk.mittest.util.config.AuthService
+import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.p
 import com.magnariuk.mittest.views.home.HomeView
 import com.magnariuk.mittest.views.login.LoginView
@@ -48,8 +49,8 @@ class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
             width = "100%"
             justifyContentMode = FlexComponent.JustifyContentMode.BETWEEN
             alignItems = FlexComponent.Alignment.CENTER
-            style.set("margin-left", 30.p)
-                    .set("margin-right", 30.p)
+            style.set(CSS.MARGIN_LEFT, 30.p)
+                    .set(CSS.MARGIN_RIGHT, 30.p)
         }
         addToNavbar(header)
 

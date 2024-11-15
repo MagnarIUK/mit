@@ -18,6 +18,9 @@ object CSS {
     const val COLOR = "color"
     const val PADDING = "padding"
     const val MARGIN = "margin"
+    const val MARGIN_BOTTOM = "margin-bottom"
+    const val MARGIN_LEFT = "margin-left"
+    const val MARGIN_RIGHT = "margin-right"
     const val SOLID = "solid"
 
 }

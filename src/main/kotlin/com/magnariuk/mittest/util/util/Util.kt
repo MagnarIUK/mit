@@ -11,7 +11,14 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
+fun generateRandomHex(length: Int): String {
+    val hexChars = "0123456789ABCDEF"
+    return (1..length)
+        .map { hexChars[Random.nextInt(16)] }
+        .joinToString("")
+}
 
 
 fun showError(message: String, dur: Int = 5000, showCloseButton: Boolean = false) {

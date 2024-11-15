@@ -53,15 +53,6 @@ object ProjectAccesses: Table(){
     override val primaryKey = PrimaryKey(access_id, name = "project_access_pk")
 }
 
-object Tags: Table(){
-    val tag_id: Column<Int> = integer("tag_id").autoIncrement()
-    val project_id: Column<Int> = integer("project_id").references(Projects.project_id)
-    val tag_name: Column<String> = varchar("tag_name", 50)
-    val commit_id: Column<Int> = integer("commit_id").references(Commits.commit_id)
-    val tagged_at: Column<Long> = long("tagged_at")
-    override val primaryKey = PrimaryKey(tag_id, name = "tags_pk")
-}
-
 object UserActivities: Table() {
     val activity_id: Column<Int> = integer("activity_id").autoIncrement()
     val user_id: Column<Int> = integer("user_id").references(Users.user_id)

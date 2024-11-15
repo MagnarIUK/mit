@@ -116,7 +116,7 @@ class HomeView(
 
                 addColumn(ComponentRenderer { project ->
                     val author = userService.getUserById(project.author_id)
-                    Button(author!!.display_name ?: author.username).apply {
+                    Button(author!!.username).apply {
                         style.set(CSS.COLOR, COLORS.BLUE)
                         addThemeVariants(ButtonVariant.LUMO_TERTIARY)
                         addClickListener {
@@ -125,25 +125,28 @@ class HomeView(
                     }
                 }).setHeader("Автор").setSortable(true)
 
-                addColumn(ComponentRenderer { project ->
+                /*addColumn(ComponentRenderer { project ->
                     Button("Деталі").apply {
                         addThemeVariants(ButtonVariant.LUMO_TERTIARY)
                         addClickListener {
                                 UI.getCurrent().navigate("project?p=${project.project_id}")
                         }
                     }
-                }).setHeader("Деталі")
+                }).setHeader("Деталі")*/
+                addItemClickListener { event ->
+                    UI.getCurrent().navigate("project?p=${event.item.project_id}")
 
+                }
 
 
                 height = 400.px
             }
             val projectList = VerticalLayout().apply {
-                style.set(CSS.BACKGROUND_COLOR, "f0f0f0".p)
+                style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
                 style.set(CSS.BORDER_RADIUS, 10.px)
                 style.set(CSS.PADDING, 10.px)
                 style.set(CSS.MARGIN, 5.px)
-                style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".p).css())
+                style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
                 style.set(CSS.HEIGHT, 400.px)
                 width = 80.p
                 style.set(CSS.OVERFLOW, OVERFLOW.AUTO)

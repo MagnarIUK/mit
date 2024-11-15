@@ -51,13 +51,6 @@ data class ProjectAccess(
     val access_level: Int
 )
 
-data class Tag(
-    val tag_id: Int,
-    val project_id: Int,
-    val tag_name: String,
-    val commit_id: Int,
-    val tagged_at: Long
-)
 
 data class UserActivity(
     val activity_id: Int,

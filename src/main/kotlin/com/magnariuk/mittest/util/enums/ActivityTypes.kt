@@ -36,9 +36,6 @@ enum class ActivityTypes(val label: String, val type: String, val private: Boole
     COMMIT_ACCEPTED("Внесок прийнято", "commit-accepted", false),
     COMMIT_REJECTED("Внесок відхилено", "commit-rejected", false),
 
-
-
-
     ;
 
     companion object {
