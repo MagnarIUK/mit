@@ -23,11 +23,14 @@ import com.vaadin.flow.router.*
 import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
+import com.magnariuk.mittest.views.login.LoginView
 
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Проєкти")
-@Route(value = "home", layout = MainLayout::class)
+@Route(value = "", layout = MainLayout::class)
+@RouteAlias("home", layout = MainLayout::class)
+@RouteAlias("main",layout = MainLayout::class)
 class HomeView(
     @Autowired private val authService: AuthService,
     @Autowired private val projectService: ProjectService,
@@ -121,22 +124,14 @@ class HomeView(
                         style.set(CSS.COLOR, COLORS.BLUE)
                         addThemeVariants(ButtonVariant.LUMO_TERTIARY)
                         addClickListener {
-                            UI.getCurrent().navigate("user?u=${author.username}")
+                            ui.ifPresent {ui -> ui.navigate("user?u=${author.username}") }
+
                         }
                     }
                 }).setHeader("Автор").setSortable(true)
-
-                /*addColumn(ComponentRenderer { project ->
-                    Button("Деталі").apply {
-                        addThemeVariants(ButtonVariant.LUMO_TERTIARY)
-                        addClickListener {
-                                UI.getCurrent().navigate("project?p=${project.project_id}")
-                        }
-                    }
-                }).setHeader("Деталі")*/
+                
                 addItemClickListener { event ->
-                    UI.getCurrent().navigate("project?p=${event.item.project_id}")
-
+                    ui.ifPresent {ui -> ui.navigate("project?p=${event.item.project_id}") }
                 }
 
 

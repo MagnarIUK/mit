@@ -5,7 +5,6 @@ import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.p
 import com.magnariuk.mittest.views.home.HomeView
 import com.magnariuk.mittest.views.login.LoginView
-import com.magnariuk.mittest.views.login.LogoutView
 import com.magnariuk.mittest.views.user.UserView
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.applayout.AppLayout
@@ -26,7 +25,7 @@ class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
             add(createNavLink("Головна", HomeView::class.java))
             if(authService.isUserLoggedIn()){
                 add(createNavLink("Користувач", UserView::class.java))
-                add(createNavLink("Вийти", LogoutView::class.java))
+                add(createNavLink("Вийти", LoginView::class.java))
             } else{
                 add(createNavLink("Увійти", LoginView::class.java))
 
@@ -56,10 +55,18 @@ class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
 
     }
 
-    private fun createNavLink(text: String, navigationTarget: Class<out Component>): RouterLink {
-        return RouterLink(text, navigationTarget).apply {
-            style.set("margin-right", "10px")
+    private fun createNavLink(text: String, navigationTarget: Class<out Component>, logout: Boolean = false): RouterLink {
+        return if( logout){
+            authService.logout()
+            RouterLink(text, navigationTarget).apply {
+                style.set("margin-right", "10px")
+            }
+        } else{
+            RouterLink(text, navigationTarget).apply {
+                style.set("margin-right", "10px")
+            }
         }
     }
+
 
 }

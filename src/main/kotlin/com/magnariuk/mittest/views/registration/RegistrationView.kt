@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.px
 import com.magnariuk.mittest.util.util.showSuccess
+import com.magnariuk.mittest.views.home.HomeView
+import com.magnariuk.mittest.views.login.LoginView
+import com.vaadin.flow.router.RouteAlias
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Регістрація")
-@Menu(icon = "line-awesome/svg/pencil-ruler-solid.svg", order = 2.0)
 @Route(value = "registration")
+@RouteAlias("reg")
 @AnonymousAllowed
 class RegistrationView(
     @Autowired private val authService: AuthService) : KComposite() {
@@ -93,7 +96,7 @@ class RegistrationView(
 
                         if (isRegistrated) {
                             showSuccess("Зареєстровано, увійдіть")
-                            UI.getCurrent().navigate("login")
+                            ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
                         } else{
                             println("Даний користувач вже існує")
                             usernameField.isInvalid =true
@@ -110,7 +113,7 @@ class RegistrationView(
             button("Увійти"){
                 width = 300.px
                 onLeftClick {
-                    UI.getCurrent().navigate("login")
+                    ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
                 }
             }
 

@@ -7,16 +7,20 @@ import com.magnariuk.mittest.util.config.AuthService
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
-import com.vaadin.flow.router.PageTitle
-import com.vaadin.flow.router.Route
 import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.px
+import com.magnariuk.mittest.util.util.showError
 import com.magnariuk.mittest.util.util.showSuccess
+import com.magnariuk.mittest.views.home.HomeView
+import com.magnariuk.mittest.views.registration.RegistrationView
+import com.vaadin.flow.router.*
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Вхід")
-@Route(value = "login")
+@Route("login")
+@RouteAlias("auth")
+@RouteAlias("log")
 class LoginView(@Autowired private val authService: AuthService) : KComposite() {
 
     private val root = ui {
@@ -47,23 +51,28 @@ class LoginView(@Autowired private val authService: AuthService) : KComposite() 
                 setPrimary()
                 addClickShortcut(Key.ENTER)
                 onLeftClick {
-                    val _username = usernameField.value
-                    val _password = passwordField.value
+                    if (authService.isUserLoggedIn()){
+                        showError("Ви уже автентифіковані")
+                        ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
+                    } else {
+                        val _username = usernameField.value
+                        val _password = passwordField.value
 
-                    val isAuthenticated = authService.login(_username, _password)
-                    when (isAuthenticated) {
-                        "true" -> {
-                            showSuccess("Вхід успішний")
-                            UI.getCurrent().navigate("home")
+                        val isAuthenticated = authService.login(_username, _password)
+                        when (isAuthenticated) {
+                            "true" -> {
+                                showSuccess("Вхід успішний")
+                                ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
 
-                        }
-                        "false:unf" -> {
-                            usernameField.isInvalid = true
-                            usernameField.errorMessage  ="Користувача не знайдено"
-                        }
-                        "false:pnv" -> {
-                            passwordField.isInvalid = true
-                            passwordField.errorMessage = "Пароль невірний"
+                            }
+                            "false:unf" -> {
+                                usernameField.isInvalid = true
+                                usernameField.errorMessage  ="Користувача не знайдено"
+                            }
+                            "false:pnv" -> {
+                                passwordField.isInvalid = true
+                                passwordField.errorMessage = "Пароль невірний"
+                            }
                         }
                     }
                 }
@@ -72,13 +81,16 @@ class LoginView(@Autowired private val authService: AuthService) : KComposite() 
             button("Реєстрація") {
                 width = 300.px
                 onLeftClick {
-                    UI.getCurrent().navigate("registration")
+                    ui.ifPresent {ui -> ui.navigate(RegistrationView::class.java) }
                 }
             }
         }
 
 
+
         }
+
+
 
 }
 

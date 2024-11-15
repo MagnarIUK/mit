@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.enums.ActivityTypes
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
+import com.magnariuk.mittest.views.home.HomeView
+import com.magnariuk.mittest.views.login.LoginView
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
@@ -62,34 +64,6 @@ class UserView(
                 justifyContentMode = JustifyContentMode.CENTER
                 alignItems = Alignment.CENTER
             }
-            /*horizontalLayout {
-                alignItems = Alignment.CENTER
-                justifyContentMode = JustifyContentMode.CENTER
-                width = "600px"
-
-                button("Назад") {
-                    width = "30%"
-                    setPrimary()
-                    onLeftClick {
-                        UI.getCurrent().navigate("home")
-                    }
-                }
-                if(user != null){
-                    button("Вийти") {
-                        width = "10%"
-                        addThemeVariants(ButtonVariant.LUMO_TERTIARY)
-                        onLeftClick {
-                            if(user != null){
-                                UI.getCurrent().navigate("logout")
-                            }
-                        }
-                    }
-                }
-
-
-
-            }*/
-
 
         }
 
@@ -134,7 +108,8 @@ class UserView(
                                                         userService.updateUser(user!!.copy(), username = field.value)
                                                         showSuccess("Видиме ім'я змінено на ${field.value}")
                                                         dialog.close()
-                                                        UI.getCurrent().navigate("logout")
+                                                        authService.logout()
+                                                        ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
                                                     } else{
                                                         showError("Користувач з даним ім'ям користувача вже існує")
                                                     }
@@ -186,7 +161,8 @@ class UserView(
                                                             userService.updateUser(user!!.copy(), rawPassword = field2.value)
                                                             showSuccess("Пароль змінено, увійдіть знову")
                                                             dialog.close()
-                                                            UI.getCurrent().navigate("logout")
+                                                            authService.logout()
+                                                            ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
                                                         } else{
                                                             showError("Пароль має бути не коротшим за 8 символів")
                                                         }

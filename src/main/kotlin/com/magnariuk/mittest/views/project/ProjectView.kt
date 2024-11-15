@@ -16,6 +16,7 @@ import com.magnariuk.mittest.util.enums.AccessLevelsAdd
 import com.magnariuk.mittest.util.enums.CommitStatuses
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
+import com.magnariuk.mittest.views.home.HomeView
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
@@ -177,7 +178,7 @@ class ProjectView(
                                     addThemeVariants(ButtonVariant.LUMO_WARNING)
                                     onLeftClick {
                                         dialog.close()
-                                        UI.getCurrent().navigate("home")
+                                        ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
                                         projectService.delProject(currentProject!!.project_id, user!!)
                                         showSuccess("Проєкт видалено")
                                     }
@@ -304,7 +305,8 @@ class ProjectView(
                                 AccessLevels.getDisplayName(ac!!.access_level)
                             }.setSortable(false)
                             addItemClickListener { event ->
-                                UI.getCurrent().navigate("/user?u=${event.item.username}")
+                                ui.ifPresent {ui -> ui.navigate("user?u=${event.item.username}") }
+
                             }
 
 
@@ -439,7 +441,8 @@ class ProjectView(
 
                             addItemClickListener {event ->
                                 val clickedItem = event.item
-                                UI.getCurrent().navigate("/user?u=${clickedItem.username}")
+                                ui.ifPresent {ui -> ui.navigate("user?u=${clickedItem.username}") }
+
                             }
                         }
                         height = 200.px
@@ -500,14 +503,17 @@ class ProjectView(
 
                         Button(user.username).apply {
                             onLeftClick {
-                                UI.getCurrent().navigate("/user?u=${user.username}")
+                                ui.ifPresent {ui -> ui.navigate("user?u=${user.username}") }
+
                             }
                         }
 
                     })
 
                     addItemClickListener { event ->
-                        UI.getCurrent().navigate("/commit?c=${event.item.commit_hash}")
+                        ui.ifPresent {ui -> ui.navigate("commit?c=${event.item.commit_hash}") }
+
+
                     }
 
                 }
@@ -603,9 +609,12 @@ class ProjectView(
 
             }else{
                 showError("Нема доступу", 0, true)
+                ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
             }
         }else{
             showError("Нема доступу", 0, true)
+            ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
+
         }
 
 
