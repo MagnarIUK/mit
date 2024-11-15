@@ -40,6 +40,7 @@ import com.vaadin.flow.router.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.InputStream
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Проєкт")
 @Route("/project", layout = MainLayout::class)
 class ProjectView(

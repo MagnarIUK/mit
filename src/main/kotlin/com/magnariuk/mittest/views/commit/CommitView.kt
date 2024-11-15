@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.vaadin.olli.FileDownloadWrapper
 import java.io.ByteArrayInputStream
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Внесок")
 @Route("/commit", layout = MainLayout::class)
 class CommitView(

@@ -14,7 +14,7 @@ import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.px
 import com.magnariuk.mittest.util.util.showSuccess
 
-
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Вхід")
 @Route(value = "login")
 class LoginView(@Autowired private val authService: AuthService) : KComposite() {

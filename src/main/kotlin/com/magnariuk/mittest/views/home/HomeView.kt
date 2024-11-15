@@ -25,6 +25,7 @@ import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
 
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Проєкти")
 @Route(value = "home", layout = MainLayout::class)
 class HomeView(

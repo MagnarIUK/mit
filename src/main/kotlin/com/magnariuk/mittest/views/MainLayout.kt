@@ -14,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.router.RouterLink
 import org.springframework.beans.factory.annotation.Autowired
-
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
 
     init {

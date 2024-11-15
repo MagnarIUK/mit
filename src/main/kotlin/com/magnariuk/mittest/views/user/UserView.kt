@@ -29,6 +29,8 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.router.*
 
+
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Користувач")
 @Route("/user", layout = MainLayout::class)
 class UserView(

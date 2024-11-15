@@ -16,7 +16,7 @@ import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.px
 import com.magnariuk.mittest.util.util.showSuccess
 
-
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Регістрація")
 @Menu(icon = "line-awesome/svg/pencil-ruler-solid.svg", order = 2.0)
 @Route(value = "registration")

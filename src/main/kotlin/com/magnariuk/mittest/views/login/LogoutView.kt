@@ -9,7 +9,7 @@ import com.vaadin.flow.router.Route
 import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.util.showSuccess
 
-
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @Route(value = "logout")
 class LogoutView(@Autowired private val authService: AuthService): KComposite() {
     val user = authService.getLoggedInUser()
