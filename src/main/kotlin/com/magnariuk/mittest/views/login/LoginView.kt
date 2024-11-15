@@ -51,16 +51,20 @@ class LoginView(@Autowired private val authService: AuthService) : KComposite() 
                     val _password = passwordField.value
 
                     val isAuthenticated = authService.login(_username, _password)
-                    if (isAuthenticated== "true") {
-                        showSuccess("Вхід успішний")
-                        UI.getCurrent().navigate("home")
+                    when (isAuthenticated) {
+                        "true" -> {
+                            showSuccess("Вхід успішний")
+                            UI.getCurrent().navigate("home")
 
-                    } else if(isAuthenticated == "false:unf"){
-                        usernameField.isInvalid = true
-                        usernameField.errorMessage  ="Користувача не знайдено"
-                    } else if(isAuthenticated == "false:pnv"){
-                        passwordField.isInvalid = true
-                        passwordField.errorMessage = "Пароль невірний"
+                        }
+                        "false:unf" -> {
+                            usernameField.isInvalid = true
+                            usernameField.errorMessage  ="Користувача не знайдено"
+                        }
+                        "false:pnv" -> {
+                            passwordField.isInvalid = true
+                            passwordField.errorMessage = "Пароль невірний"
+                        }
                     }
                 }
             }

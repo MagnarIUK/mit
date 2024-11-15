@@ -24,7 +24,7 @@ import com.magnariuk.mittest.util.util.showSuccess
 class RegistrationView(
     @Autowired private val authService: AuthService) : KComposite() {
     private val root = ui {
-        verticalLayout() {
+        verticalLayout {
             alignItems = Alignment.CENTER
             justifyContentMode = JustifyContentMode.CENTER
             h1("Реєстрація"){

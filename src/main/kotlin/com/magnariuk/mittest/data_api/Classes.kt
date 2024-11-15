@@ -1,11 +1,5 @@
 package com.magnariuk.mittest.data_api
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-
 
 data class Project(
     val project_id: Int,

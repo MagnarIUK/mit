@@ -1,6 +1,5 @@
 package com.magnariuk.mittest.util.util
 
-val MIN_CONTENT = "min-content"
 
 object CSS {
     const val MIN_CONTENT = "min-content"

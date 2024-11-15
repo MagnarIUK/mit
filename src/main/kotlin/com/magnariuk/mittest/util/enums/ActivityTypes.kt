@@ -30,7 +30,7 @@ enum class ActivityTypes(val label: String, val type: String, val private: Boole
     COMMIT_MEMBER_ACCEPTED("Ваш внесок прийнято", "commit-member-accepted", false),
     COMMIT_MEMBER_REJECTED("Ваш внесок відхилено", "commit-member-rejected", false),
 
-    COMMIT_CREATED("Сворено внесок", "commit-created", false),
+    COMMIT_CREATED("Створено внесок", "commit-created", false),
     COMMIT_EDITED("Внесок змінено", "commit-edit", false),
     COMMIT_DELETED("Внесок видалено", "commit-deleted", false),
     COMMIT_ACCEPTED("Внесок прийнято", "commit-accepted", false),

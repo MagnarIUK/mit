@@ -32,7 +32,7 @@ class HomeView(
     @Autowired private val projectService: ProjectService,
     private val userService: UserService
 ): KComposite(), BeforeEnterObserver {
-    private var authenticated: Boolean = authService.isUserLoggedIn();
+    private var authenticated: Boolean = authService.isUserLoggedIn()
     private var user = authService.getLoggedInUser()
     private lateinit var dynamicLayout: VerticalLayout
 
@@ -60,7 +60,7 @@ class HomeView(
         dynamicLayout.removeAll()
 
         if(authenticated) {
-            val projects = projectService.getProjectsWithAccess(user!!.id).map { it -> projectService.getProjectById(it.project_id)!! }
+            val projects = projectService.getProjectsWithAccess(user!!.id).map { projectService.getProjectById(it.project_id)!! }
 
             val dataProvider = ListDataProvider(projects)
             val searchField = TextField().apply {
@@ -140,18 +140,6 @@ class HomeView(
 
 
                 height = 400.px
-            }
-            val projectList = VerticalLayout().apply {
-                style.set(CSS.BACKGROUND_COLOR, "f0f0f0".hex)
-                style.set(CSS.BORDER_RADIUS, 10.px)
-                style.set(CSS.PADDING, 10.px)
-                style.set(CSS.MARGIN, 5.px)
-                style.set(CSS.BORDER, ELEMENT().add(1.px).add(CSS.SOLID).add("d3d3d3".hex).css())
-                style.set(CSS.HEIGHT, 400.px)
-                width = 80.p
-                style.set(CSS.OVERFLOW, OVERFLOW.AUTO)
-                alignItems = Alignment.CENTER
-                justifyContentMode = JustifyContentMode.CENTER
             }
 
 

@@ -11,8 +11,6 @@ import com.magnariuk.mittest.util.config.UserService
 import com.magnariuk.mittest.util.enums.CommitStatuses
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.combobox.ComboBox
@@ -21,7 +19,6 @@ import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.NativeLabel
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -35,7 +32,6 @@ import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
 import org.springframework.beans.factory.annotation.Autowired
 import org.vaadin.olli.FileDownloadWrapper
-import java.awt.Dialog
 import java.io.ByteArrayInputStream
 
 @PageTitle("Внесок")
@@ -47,7 +43,7 @@ class CommitView(
     @Autowired private val commitService: CommitService
 ): KComposite(), BeforeEnterObserver {
     var user = authService.getLoggedInUser()
-    var currentCommit: Commit? = null
+    private var currentCommit: Commit? = null
 
     private lateinit var dynamicLayout: VerticalLayout
 
@@ -70,18 +66,18 @@ class CommitView(
 
     private val root = ui {
         verticalLayout {
-            alignItems = FlexComponent.Alignment.CENTER
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+            alignItems = Alignment.CENTER
+            justifyContentMode = JustifyContentMode.CENTER
 
             dynamicLayout = verticalLayout {
-                alignItems = FlexComponent.Alignment.CENTER
-                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+                alignItems = Alignment.CENTER
+                justifyContentMode = JustifyContentMode.CENTER
             }
         }
     }
 
 
-    fun updateUI() {
+    private fun updateUI() {
         dynamicLayout.removeAll()
 
         val commitProjectAccess = projectService.getAccessByProjectAndUser(currentCommit!!.project_id, user!!.id)
@@ -168,7 +164,7 @@ class CommitView(
 
         val files = commitService.getFilesByCommit(currentCommit!!.commit_id)
         val filesDataProvider = ListDataProvider(files)
-        var searchField = TextField().apply {
+        val searchField = TextField().apply {
             placeholder = "Пошук..."
             width = 300.px
 
@@ -206,9 +202,9 @@ class CommitView(
                     icon = Icon(VaadinIcon.DOWNLOAD)
                     addThemeVariants(ButtonVariant.LUMO_ICON)
                 }
-                val filetoDownload = java.io.File(fileX.file_path)
+                val fileToDownload = java.io.File(fileX.file_path)
                 val buttonWrapper = FileDownloadWrapper(
-                    StreamResource(filetoDownload.name, InputStreamFactory {ByteArrayInputStream(filetoDownload.readBytes())})
+                    StreamResource(fileToDownload.name, InputStreamFactory {ByteArrayInputStream(fileToDownload.readBytes())})
                 )
                 buttonWrapper.wrapComponent(b)
 
@@ -230,7 +226,7 @@ class CommitView(
             }
         }
 
-        var rightBarHolder = VerticalLayout(
+        val rightBarHolder = VerticalLayout(
             HorizontalLayout(searchField,downloadCommitButtonWrapper),
             filesGrid
         ).apply {

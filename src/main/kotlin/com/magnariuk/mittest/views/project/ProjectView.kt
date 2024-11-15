@@ -48,11 +48,11 @@ class ProjectView(
     @Autowired private val projectService: ProjectService,
     @Autowired private val commitService: CommitService
 ): KComposite(), BeforeEnterObserver {
-    var user = authService.getLoggedInUser()
-    var currentProject: Project? = null
-    var currentAccess: ProjectAccess? = null
-    var authenticated: Boolean = authService.isUserLoggedIn();
-    var estimatedUser: User? = null
+    private var user = authService.getLoggedInUser()
+    private var currentProject: Project? = null
+    private var currentAccess: ProjectAccess? = null
+    private var authenticated: Boolean = authService.isUserLoggedIn();
+    private var estimatedUser: User? = null
 
     private lateinit var dynamicLayout: VerticalLayout
 
@@ -99,7 +99,7 @@ class ProjectView(
 
                 val projectUsers = projectService.getUsersWithAccess(currentProject!!.project_id)
                 println(projectUsers)
-                val users: List<User> = projectUsers.map { it -> userService.getUserById(it.user_id)!! }.sortedWith { user1, user2 ->
+                val users: List<User> = projectUsers.map { userService.getUserById(it.user_id)!! }.sortedWith { user1, user2 ->
                     val access1 = projectService.getAccessByProjectAndUser(currentProject!!.project_id, user1.id)
                     val access2 = projectService.getAccessByProjectAndUser(currentProject!!.project_id, user2.id)
 
@@ -298,7 +298,7 @@ class ProjectView(
                         if(currentAccess!!.access_level != 3){
                             addColumn {it.display_name?: it.username}.setHeader("Користувачі:")
 
-                            addColumn {it ->
+                            addColumn {
                                 val ac: ProjectAccess? = projectService.getAccessByProjectAndUser(currentProject!!.project_id, it.id)
                                 AccessLevels.getDisplayName(ac!!.access_level)
                             }.setSortable(false)

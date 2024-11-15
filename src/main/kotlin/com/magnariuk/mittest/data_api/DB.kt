@@ -8,10 +8,8 @@ import java.security.MessageDigest
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 open class DatabaseController{
-    fun hashString(input: String, algorithm: String = "SHA-256"): String {
-        val bytes = MessageDigest.getInstance(algorithm).digest(input.toByteArray())
-        return bytes.joinToString("") { "%02x".format(it) }
-    }
+
+
 
     fun databaseExists(dbPath: String): Boolean {
         val file = File(dbPath)
@@ -189,24 +187,24 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getCommitşByProject(_project_id: Int): List<Commit>{
+    fun getCommitsByProject(_project_id: Int): List<Commit>{
         return dbController.dbQuery {
             Commits.selectAll().where { Commits.project_id eq  _project_id}.toList().map { Converter().toCommit(it) }
         }
     }
 
-    fun getCommitşByHash(_hash: String): Commit? {
+    fun getCommitsByHash(_hash: String): Commit? {
         return dbController.dbQuery {
             Commits.selectAll().where { Commits.commit_hash eq _hash }.firstOrNull()?.let { Converter().toCommit(it) }
         }
     }
 
-    fun getCommitşByProjectAndAuthor(_project_id: Int, _author_id: Int): List<Commit>{
+    fun getCommitsByProjectAndAuthor(_project_id: Int, _author_id: Int): List<Commit>{
         return dbController.dbQuery {
             Commits.selectAll().where { Commits.project_id eq  _project_id and (Commits.author_id eq _author_id)}.map { Converter().toCommit(it) }
         }
     }
-    fun getCommitşByAuthor( _author_id: Int): List<ResultRow>{
+    fun getCommitsByAuthor( _author_id: Int): List<ResultRow>{
         return dbController.dbQuery {
             Commits.selectAll().where { Commits.author_id eq _author_id}.toList()
         }
@@ -268,7 +266,7 @@ open class DB(private val dbController: DatabaseController) {
 
     fun deleteProjectAccessesByProjectId(_project_id: Int){
         dbController.dbQuery {
-            ProjectAccesses.deleteWhere { ProjectAccesses.project_id eq _project_id }
+            ProjectAccesses.deleteWhere { project_id eq _project_id }
         }
     }
 
@@ -297,7 +295,7 @@ open class DB(private val dbController: DatabaseController) {
     }
     fun deleteProjectAccess(_access_id: Int){
         dbController.dbQuery {
-            ProjectAccesses.deleteWhere { ProjectAccesses.access_id eq _access_id }
+            ProjectAccesses.deleteWhere { access_id eq _access_id }
         }
     }
 
@@ -341,7 +339,7 @@ open class DB(private val dbController: DatabaseController) {
 
 }
 
-open class Converter() {
+open class Converter {
     fun toUser(row: ResultRow): User {
         return User(
             id = row[Users.user_id],

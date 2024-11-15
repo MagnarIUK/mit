@@ -59,7 +59,7 @@ class CommitService(
             if (ex == "zip"){
                 val unpackedFiles = unzipArchive(inputStream, commit)
                 unpackedFiles.forEach { (fileName1, fileUn ) ->
-                    AddFileToCommit(
+                    addFileToCommit(
                         commit,
                         File(
                             1,
@@ -72,7 +72,7 @@ class CommitService(
                 }
             } else{
                 val fileToCreate = importFile(fileName, inputStream, commit)
-                AddFileToCommit(
+                addFileToCommit(
                     commit,
                     File(
                         1,
@@ -89,7 +89,7 @@ class CommitService(
 
     fun acceptCommit(commitId: Int){
         val commit = getCommitById(commitId)!!
-        val newCommit: Commit = Commit(
+        val newCommit = Commit(
             commit_id = commit.commit_id,
             project_id = commit.project_id,
             commit_hash = commit.commit_hash,
@@ -118,7 +118,7 @@ class CommitService(
 
     fun rejectCommit(commitId: Int){
         val commit = getCommitById(commitId)!!
-        val newCommit: Commit = Commit(
+        val newCommit = Commit(
             commit_id = commit.commit_id,
             project_id = commit.project_id,
             commit_hash = commit.commit_hash,
@@ -148,14 +148,14 @@ class CommitService(
 
 
 
-    fun getCommitsByProjectId(projectId: Int): List<Commit> = db.getCommitşByProject(projectId)
+    fun getCommitsByProjectId(projectId: Int): List<Commit> = db.getCommitsByProject(projectId)
 
 
-    fun getCommitsByCommitHash(hash: String): Commit? = db.getCommitşByHash(hash)
+    fun getCommitsByCommitHash(hash: String): Commit? = db.getCommitsByHash(hash)
 
     fun getCommitById(commitId: Int): Commit? = db.getCommitById(commitId)
 
-    fun AddFileToCommit(commit: Commit, file: File){
+    fun addFileToCommit(commit: Commit, file: File){
         db.InsertFiles(
             commit.commit_id,
             file.file_path,

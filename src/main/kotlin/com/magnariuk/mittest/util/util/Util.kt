@@ -47,7 +47,7 @@ fun unixToDate(unixTimestamp: Long): String {
 
 fun showSuccess(message: String, dur: Int = 5000, showCloseButton: Boolean = false) {
     val notification = Notification(message)
-    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS)
     notification.position = (Notification.Position.TOP_CENTER)
     notification.duration = dur
     if(showCloseButton){

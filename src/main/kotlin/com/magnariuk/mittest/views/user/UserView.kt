@@ -35,9 +35,8 @@ class UserView(
     @Autowired private val authService: AuthService,
     @Autowired private val userService: UserService,
 ): KComposite(), BeforeEnterObserver {
-    var user = authService.getLoggedInUser()
-    var authenticated: Boolean = authService.isUserLoggedIn();
-    var currentUser: User? = null
+    private var user = authService.getLoggedInUser()
+    private var currentUser: User? = null
 
     private lateinit var dynamicLayout: VerticalLayout
 
