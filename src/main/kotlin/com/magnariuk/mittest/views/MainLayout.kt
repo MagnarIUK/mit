@@ -1,19 +1,19 @@
 package com.magnariuk.mittest.views
 
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.magnariuk.mittest.util.config.AuthService
 import com.magnariuk.mittest.util.util.CSS
 import com.magnariuk.mittest.util.util.p
 import com.magnariuk.mittest.views.home.HomeView
 import com.magnariuk.mittest.views.login.LoginView
 import com.magnariuk.mittest.views.user.UserView
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.html.H1
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.router.RouterLink
 import org.springframework.beans.factory.annotation.Autowired
-@Suppress("SpringJavaInjectionPointsAutowiringInspection")
+import com.vaadin.flow.component.button.Button
+
 class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
 
     init {
@@ -22,12 +22,12 @@ class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
         }
 
         val menu = HorizontalLayout().apply {
-            add(createNavLink("Головна", HomeView::class.java))
+            add(Button("Головна").apply { onLeftClick { ui.ifPresent {ui -> ui.navigate(HomeView::class.java) } } })
             if(authService.isUserLoggedIn()){
-                add(createNavLink("Користувач", UserView::class.java))
-                add(createNavLink("Вийти", LoginView::class.java))
+                add(Button("Користувач").apply { onLeftClick { ui.ifPresent {ui -> ui.navigate(UserView::class.java) } } })
+                add(Button("Вийти").apply { onLeftClick { authService.logout(); ui.ifPresent {ui -> ui.navigate(LoginView::class.java) } } })
             } else{
-                add(createNavLink("Увійти", LoginView::class.java))
+                add(Button("Увійти").apply { onLeftClick { ui.ifPresent {ui -> ui.navigate(LoginView::class.java) } } })
 
             }
             isSpacing = true
@@ -55,18 +55,7 @@ class MainLayout(@Autowired private val authService: AuthService): AppLayout() {
 
     }
 
-    private fun createNavLink(text: String, navigationTarget: Class<out Component>, logout: Boolean = false): RouterLink {
-        return if( logout){
-            authService.logout()
-            RouterLink(text, navigationTarget).apply {
-                style.set("margin-right", "10px")
-            }
-        } else{
-            RouterLink(text, navigationTarget).apply {
-                style.set("margin-right", "10px")
-            }
-        }
-    }
+
 
 
 }

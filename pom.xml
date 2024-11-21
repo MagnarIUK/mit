@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.magnariuk</groupId>
     <artifactId>mit-test</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>mit-test</name>
-    <description>mit-test</description>
+    <version>1.1.0-RELEASE</version>
+    <name>mit</name>
+    <description>mit</description>
     <url/>
     <licenses>
         <license/>
@@ -28,7 +28,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.9.25</kotlin.version>
+        <kotlin.version>2.0.21</kotlin.version>
         <vaadin.version>24.5.0</vaadin.version>
     </properties>
     <repositories>
@@ -48,7 +48,8 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
 
         <dependency>
@@ -56,6 +57,13 @@
             <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
 
 
 
@@ -84,12 +92,6 @@
             <artifactId>exposed-dao</artifactId>
             <version>0.55.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-community-dialects -->
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-community-dialects</artifactId>
-            <version>6.6.1.Final</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.mvysny.karibu-tools/karibu-tools -->
         <dependency>
             <groupId>com.github.mvysny.karibu-tools</groupId>
@@ -115,20 +117,16 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>6.3.3</version>
         </dependency>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
@@ -155,6 +153,35 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/kotlin</source>
+                                <source>target/generated-sources/annotations</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/test/kotlin</source>
+                                <source>target/generated-test-sources/test-annotations</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <args>
                         <arg>-Xjsr305=strict</arg>
@@ -162,6 +189,7 @@
                     <compilerPlugins>
                         <plugin>spring</plugin>
                     </compilerPlugins>
+                    <jvmTarget>17</jvmTarget>
                 </configuration>
                 <dependencies>
                     <dependency>

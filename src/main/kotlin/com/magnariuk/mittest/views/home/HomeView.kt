@@ -4,7 +4,6 @@ import com.magnariuk.mittest.data_api.Project
 import com.magnariuk.mittest.util.config.AuthService
 import com.magnariuk.mittest.util.config.ProjectService
 import com.magnariuk.mittest.util.config.UserService
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
@@ -26,7 +25,6 @@ import com.magnariuk.mittest.views.MainLayout
 import com.magnariuk.mittest.views.login.LoginView
 
 
-@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Проєкти")
 @Route(value = "", layout = MainLayout::class)
 @RouteAlias("home", layout = MainLayout::class)
@@ -129,7 +127,7 @@ class HomeView(
                         }
                     }
                 }).setHeader("Автор").setSortable(true)
-                
+
                 addItemClickListener { event ->
                     ui.ifPresent {ui -> ui.navigate("project?p=${event.item.project_id}") }
                 }
@@ -200,6 +198,8 @@ class HomeView(
             )
 
 
+        } else{
+            ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
         }
 
 

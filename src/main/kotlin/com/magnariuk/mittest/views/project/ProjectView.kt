@@ -17,7 +17,7 @@ import com.magnariuk.mittest.util.enums.CommitStatuses
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
 import com.magnariuk.mittest.views.home.HomeView
-import com.vaadin.flow.component.UI
+import com.magnariuk.mittest.views.login.LoginView
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.combobox.ComboBox
@@ -41,7 +41,6 @@ import com.vaadin.flow.router.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.InputStream
 
-@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Проєкт")
 @Route("/project", layout = MainLayout::class)
 class ProjectView(
@@ -53,7 +52,7 @@ class ProjectView(
     private var user = authService.getLoggedInUser()
     private var currentProject: Project? = null
     private var currentAccess: ProjectAccess? = null
-    private var authenticated: Boolean = authService.isUserLoggedIn();
+    private var authenticated: Boolean = authService.isUserLoggedIn()
     private var estimatedUser: User? = null
 
     private lateinit var dynamicLayout: VerticalLayout
@@ -472,7 +471,7 @@ class ProjectView(
                 val commits = commitService.getCommitsByProjectId(currentProject!!.project_id)
                 val commitDataProvider = ListDataProvider(commits)
 
-                var searchField = TextField().apply {
+                val searchField = TextField().apply {
                     placeholder = "Пошук..."
                     width = 300.px
 
@@ -485,7 +484,7 @@ class ProjectView(
                     }
                 }
 
-                var commitsGrid = Grid<Commit>().apply {
+                val commitsGrid = Grid<Commit>().apply {
                     style.set(CSS.BORDER_RADIUS, 15.px)
                     dataProvider = commitDataProvider
 
@@ -530,7 +529,7 @@ class ProjectView(
                                     maxLength = 500
                                 }
 
-                                var files: MutableMap<String, InputStream> = mutableMapOf()
+                                val files: MutableMap<String, InputStream> = mutableMapOf()
                                 val buffer = MultiFileMemoryBuffer()
 
                                 val uploader = Upload(buffer).apply {
@@ -558,11 +557,10 @@ class ProjectView(
                                             Button("Створити").apply {
                                                 addThemeVariants(ButtonVariant.LUMO_PRIMARY)
                                                 onLeftClick {
-                                                    var hashCode = generateRandomHex(33)
-
-                                                    while (commitService.getCommitsByCommitHash(hashCode)!= null){
-                                                        hashCode = generateRandomHex(33)
-                                                    }
+                                                        var hashCode = generateRandomHex(33)
+                                                        while (commitService.getCommitsByCommitHash(hashCode)!= null){
+                                                            hashCode = generateRandomHex(33)
+                                                        }
 
                                                         commitService.createCommit(
                                                             currentProject!!.project_id,
@@ -575,9 +573,7 @@ class ProjectView(
                                                         showSuccess("Створено внесок")
                                                         dialog.close()
                                                         updateUI()
-
-
-                                                }
+                                                    }
                                             })
                                     )
                                 )
@@ -609,7 +605,7 @@ class ProjectView(
 
             }else{
                 showError("Нема доступу", 0, true)
-                ui.ifPresent {ui -> ui.navigate(HomeView::class.java) }
+                ui.ifPresent {ui -> ui.navigate(LoginView::class.java) }
             }
         }else{
             showError("Нема доступу", 0, true)

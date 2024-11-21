@@ -4,6 +4,7 @@ import com.magnariuk.mittest.data_api.Commit
 import com.magnariuk.mittest.data_api.Project
 import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
+import org.apache.tika.Tika
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
@@ -12,10 +13,10 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-
+val FILES_DIR = System.getenv("FILES_DIR") ?: "./FILES/COMMIT_DIR"
 fun initDirs() {
     try {
-        val commitDirPath: Path = Paths.get("./FILES/COMMIT_DIR")
+        val commitDirPath: Path = Paths.get(FILES_DIR)
         if (Files.notExists(commitDirPath)) {
             Files.createDirectories(commitDirPath)
             println("Директорію створено: $commitDirPath")
@@ -31,11 +32,39 @@ fun getFileExtensionM(fileName: String): String {
     return fileName.substringAfterLast('.', "")
 }
 
+fun processFile(file: File): String? {
+    val tika = Tika()
+    val mimeType = tika.detect(file)
+    println("MIME-тип файлу: $mimeType")
 
+    when {
+        mimeType.startsWith("image/") -> {
+            return null
+        }
+        mimeType.startsWith("text/") -> {
+            return "text"
+        }
+        mimeType.startsWith("video/") -> {
+            return null
+        }
+        mimeType in listOf(
+            "application/zip",
+            "application/x-rar-compressed",
+            "application/x-7z-compressed",
+            "application/octet-stream",
+            "application/x-msdownload"
+        ) -> {
+            return null
+        }
+        else -> {
+            return null
+        }
+    }
+}
 
 fun createCommitDir(commitDir: String){
     try {
-        val commitDirPath: Path = Paths.get("./FILES/COMMIT_DIR/$commitDir")
+        val commitDirPath: Path = Paths.get("$FILES_DIR/$commitDir")
         if (Files.notExists(commitDirPath)) {
             Files.createDirectories(commitDirPath)
             println("Директорію створено: $commitDirPath")
@@ -49,7 +78,7 @@ fun createCommitDir(commitDir: String){
 }
 
 fun zipFolderToStream(commit: Commit, project: Project): StreamResource {
-    val sourceFolder = File("./FILES/COMMIT_DIR/${commit.commit_hash}")
+    val sourceFolder = File("$FILES_DIR/${commit.commit_hash}")
     if (!sourceFolder.exists() || !sourceFolder.isDirectory) {
         println("Provided path is not a valid folder.")
         throw IllegalArgumentException("Invalid folder path")
@@ -92,7 +121,7 @@ fun zipFolderToStream(commit: Commit, project: Project): StreamResource {
 
 fun importFile(name: String, stream: InputStream, commit: Commit): File  {
     createCommitDir(commit.commit_hash)
-    val file = File("./FILES/COMMIT_DIR/${commit.commit_hash}/$name")
+    val file = File("$FILES_DIR/${commit.commit_hash}/$name")
     file.parentFile.mkdirs()
 
     FileOutputStream(file).use { outputStream ->
@@ -109,7 +138,7 @@ fun unzipArchive(zipInputStream: InputStream, commit: Commit): MutableMap<String
     var entry: ZipEntry? = zipStream.nextEntry
 
     while (entry != null) {
-        val filePath = Path.of("./FILES/COMMIT_DIR/${commit.commit_hash}", entry.name)
+        val filePath = Path.of("$FILES_DIR/${commit.commit_hash}", entry.name)
         val file = filePath.toFile()
 
         if (entry.isDirectory) {

@@ -5,7 +5,6 @@ import com.magnariuk.mittest.data_api.User
 import com.magnariuk.mittest.data_api.UserActivity
 import com.magnariuk.mittest.util.config.AuthService
 import com.magnariuk.mittest.util.config.UserService
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.magnariuk.mittest.util.enums.ActivityTypes
 import com.magnariuk.mittest.util.util.*
 import com.magnariuk.mittest.views.MainLayout
-import com.magnariuk.mittest.views.home.HomeView
 import com.magnariuk.mittest.views.login.LoginView
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
@@ -32,7 +30,6 @@ import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.router.*
 
 
-@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @PageTitle("Користувач")
 @Route("/user", layout = MainLayout::class)
 class UserView(
@@ -76,6 +73,7 @@ class UserView(
         if (currentUser == null || currentUser?.id == user?.id) {
             if (user == null) {
                 showError("Невідомий користувач")
+                ui.ifPresent { ui -> ui.navigate(LoginView::class.java) }
             }
             else {
                 val userProfileLeft = VerticalLayout(
@@ -366,7 +364,7 @@ class UserView(
                             icon = Icon(VaadinIcon.ANGLE_DOWN)
                             addClickListener {
                                 val dialog = Dialog()
-                                dialog.add(NativeLabel(activity.description).apply {
+                                dialog.add(formatText(activity.description).apply {
                                     style.set(CSS.OVERFLOW_WRAP, OVERFLOW_WRAP.BREAK_WORD)
                                     style.set(CSS.TRANSITION, ELEMENT().add(CSS.HEIGHT).add(0.5.s).add(TRANSITION_D.EASE).css())
                                     maxWidth = 500.px

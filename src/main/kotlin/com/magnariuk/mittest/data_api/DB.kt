@@ -4,7 +4,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 import org.jetbrains.exposed.sql.insert
-import java.security.MessageDigest
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 open class DatabaseController{
@@ -18,22 +17,20 @@ open class DatabaseController{
 
 
     fun init() {
-        val dbPath = "mit.sqlite"
-        if (databaseExists(dbPath)) {
-            Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
-            transaction {
-                addLogger(StdOutSqlLogger)
-                SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, UserActivities)
+        val dbPath = System.getenv("DB_PATH") ?: "mit.sqlite"
+        val dbExists = databaseExists(dbPath)
+        Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
+        transaction {
+            addLogger(StdOutSqlLogger)
+            SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, UserActivities)
+        }
+        when {
+            dbExists -> {
+                println("База даних існує і підключена")
             }
-            println("База даних існує і підключена")
-        } else {
-            Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
-            transaction {
-                addLogger(StdOutSqlLogger)
-                SchemaUtils.create(Projects, Commits, Users, Files, ProjectAccesses, UserActivities)
-                println("Таблиці створені")
+            !dbExists -> {
+                println("База даних створена і таблиці ініціалізовані")
             }
-            println("База даних створена і таблиці ініціалізовані")
         }
     }
 
@@ -42,8 +39,6 @@ open class DatabaseController{
             block()
         }
     }
-
-
 }
 
 open class DB(private val dbController: DatabaseController) {
@@ -79,11 +74,6 @@ open class DB(private val dbController: DatabaseController) {
 
     }
 
-    fun getAllUsers(): List<ResultRow> {
-        return dbController.dbQuery {
-            Users.selectAll().toList()
-        }
-    }
     fun getUserByUsername(_username: String): User? {
         return dbController.dbQuery {
             Users.selectAll().where { Users.username eq _username }.firstOrNull()?.let { Converter().toUser(it)}
@@ -114,11 +104,6 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getAllProjects(): List<Project>{
-        return dbController.dbQuery {
-            Projects.selectAll().map { Converter().toProject(it) }
-        }
-    }
     fun getProjectByName(_name: String): Project?{
         return dbController.dbQuery {
             Projects.selectAll().where {Projects.name eq _name}.firstOrNull()?.let { Converter().toProject(it) }
@@ -126,11 +111,7 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getProjectsByAuthor(_user_id: Int): List<Project>{
-        return dbController.dbQuery {
-            Projects.selectAll().where {Projects.author_id eq _user_id}.map { Converter().toProject(it) }
-        }
-    }
+
 
     fun deleteProjectById(id: Int){
         dbController.dbQuery {
@@ -175,11 +156,6 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getAllCommits(): List<Commit>{
-        return dbController.dbQuery {
-            Commits.selectAll().map { Converter().toCommit(it) }
-        }
-    }
 
     fun getCommitById(_commit_id: Int): Commit? {
         return dbController.dbQuery {
@@ -199,19 +175,6 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getCommitsByProjectAndAuthor(_project_id: Int, _author_id: Int): List<Commit>{
-        return dbController.dbQuery {
-            Commits.selectAll().where { Commits.project_id eq  _project_id and (Commits.author_id eq _author_id)}.map { Converter().toCommit(it) }
-        }
-    }
-    fun getCommitsByAuthor( _author_id: Int): List<ResultRow>{
-        return dbController.dbQuery {
-            Commits.selectAll().where { Commits.author_id eq _author_id}.toList()
-        }
-    }
-
-
-
 
     fun InsertFiles(_commit_id: Int, _file_path: String, _file_name: String, _file_size: Long){
         dbController.dbQuery {
@@ -227,11 +190,7 @@ open class DB(private val dbController: DatabaseController) {
         }
     }
 
-    fun getAllFiles(): List<com.magnariuk.mittest.data_api.File>{
-        return dbController.dbQuery {
-            Files.selectAll().map { Converter().toFile(it) }
-        }
-    }
+
     fun getFilesByCommitId(_id: Int): List<com.magnariuk.mittest.data_api.File>{
         return dbController.dbQuery {
             Files.selectAll().where { Files.commit_id eq _id}.map { Converter().toFile(it) }
@@ -271,11 +230,7 @@ open class DB(private val dbController: DatabaseController) {
     }
 
 
-    fun getAllProjectAccess(): List<ProjectAccess>{
-        return dbController.dbQuery {
-            ProjectAccesses.selectAll().map { Converter().toProjectAccess(it) }
-        }
-    }
+
     fun getProjectAccessByUserId(_user_id: Int): List<ProjectAccess>{
         return dbController.dbQuery {
             ProjectAccesses.selectAll().where { ProjectAccesses.user_id eq _user_id}.map { Converter().toProjectAccess(it) }
@@ -326,11 +281,7 @@ open class DB(private val dbController: DatabaseController) {
 
 
     }
-    fun getAllUserActivity(): List<UserActivity>{
-        return dbController.dbQuery {
-            UserActivities.selectAll().map { Converter().toActivity(it) }
-        }
-    }
+
     fun getUserActivityByUserId(_user_id: Int): List<UserActivity>{
         return dbController.dbQuery {
             UserActivities.selectAll().where{ UserActivities.user_id eq _user_id }.map { Converter().toActivity(it) }

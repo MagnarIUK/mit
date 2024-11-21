@@ -37,8 +37,26 @@ fun showError(message: String, dur: Int = 5000, showCloseButton: Boolean = false
         })
     }
     notification.open()
-
 }
+
+fun showWarning(message: String, dur: Int = 5000, showCloseButton: Boolean = false) {
+    val notification = Notification(message)
+    notification.addThemeVariants(NotificationVariant.LUMO_WARNING)
+    notification.position = (Notification.Position.TOP_CENTER)
+    notification.duration = dur
+    if(showCloseButton){
+        notification.add(
+            NativeLabel(message),
+            Button().apply {
+                icon = Icon(VaadinIcon.CLOSE)
+                onLeftClick {
+                    notification.close()
+                }
+            })
+    }
+    notification.open()
+}
+
 fun unixToDate(unixTimestamp: Long): String {
     val dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(unixTimestamp), ZoneId.systemDefault())
     val formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm:ss")
