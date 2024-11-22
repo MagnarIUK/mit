@@ -5,4 +5,4 @@ Spring Boot, Build and run
 JDK: openjdk-23
 Головний клас: com.magnariuk.mittest.NitTestApplication
 
-Для запуску в режимі prod: github.com/MagnarIUK/mit/releases/latest
+Для запуску в режимі prod: https://github.com/MagnarIUK/mit/releases/latest
